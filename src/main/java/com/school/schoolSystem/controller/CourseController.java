@@ -31,7 +31,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseResponseDTO> getAllUsers() {
+    public List<CourseResponseDTO> getAllCourses() {
         return courseService.findAll();
     }
 
