@@ -1,7 +1,7 @@
 package com.school.schoolSystem.service;
 
 import com.school.schoolSystem.dto.EnrollDTO;
-import com.school.schoolSystem.repository.EnrollmentRepository;
+import com.school.schoolSystem.repository.EnrollmentRepositoryOld;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class EnrollmentService {
 
-    private final EnrollmentRepository repo;
+    private final EnrollmentRepositoryOld repo;
 
-    public EnrollmentService(EnrollmentRepository repo) {
+    public EnrollmentService(EnrollmentRepositoryOld repo) {
         this.repo = repo;
     }
 
