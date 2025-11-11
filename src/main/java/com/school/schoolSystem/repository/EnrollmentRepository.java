@@ -24,7 +24,8 @@ public class EnrollmentRepository {
         return enrollments.stream()
                 .map(enrollment ->
                         (enrollment.getStudentId() == dto.getStudentId()) &&
-                        (enrollment.getCourseId() == dto.getCourseId())).findFirst().get();
+                        (enrollment.getCourseId() == dto.getCourseId()) ||
+                        (enrollment.isActive())).findFirst().get();
     }
 
     public void addEnrollment(EnrollDTO dto){

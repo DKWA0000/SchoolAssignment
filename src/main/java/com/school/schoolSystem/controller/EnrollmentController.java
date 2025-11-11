@@ -21,5 +21,4 @@ public class EnrollmentController {
     public ResponseEntity<List<Integer>> getEnrolledStudents(@PathVariable int courseId){
         return ResponseEntity.ok(service.getEnrolledStudents(courseId));
     }
-
 }
