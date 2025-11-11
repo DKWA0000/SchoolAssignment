@@ -9,6 +9,7 @@ import com.school.schoolSystem.model.Course;
 import com.school.schoolSystem.repository.CourseRepository;
 import io.micrometer.observation.ObservationFilter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,6 @@ public class CourseService {
         } catch (NumberFormatException ex) {
             throw new InvalidFieldValueException("maxStudents must be a number");
         }
-
 
         Course course = Course.builder()
                 .title(courseRequest.getTitle())
@@ -80,6 +80,11 @@ public class CourseService {
                 .build();
     }
 
+
+    public boolean deleteCourseById(Integer id) {
+        return repo.delete(id);
+    }
+
     public CourseResponseDTO findCourseByTitle(String title) {
 
         Optional<Course> foundCourse = repo.findByTitle(title);
@@ -99,4 +104,5 @@ public class CourseService {
     public List<CourseResponseDTO> findCourseByTeacher( String teacher) {
         return repo.findAllByTeacher(teacher);
     }
+
 }

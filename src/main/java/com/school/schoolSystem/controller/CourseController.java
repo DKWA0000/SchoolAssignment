@@ -24,8 +24,9 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody @Valid CourseRequestDTO courseDTO) {
-
+    public ResponseEntity<CourseResponseDTO> createCourse(
+            @RequestBody @Valid CourseRequestDTO courseDTO
+    ) {
         CourseResponseDTO response = courseService.createCourse(courseDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -39,8 +40,19 @@ public class CourseController {
     public ResponseEntity<CourseResponseDTO> getCourseById(
             @PathVariable
             @Min(value = 1, message = "ID must be >= 1")
-            Integer id) {
+            Integer id
+    ) {
         CourseResponseDTO response = courseService.findCourseById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteCourseById(
+            @PathVariable
+            @Min(value = 1, message = "ID must be >= 1")
+            Integer id
+    ){
+        boolean response = courseService.deleteCourseById(id);
         return ResponseEntity.ok(response);
     }
 

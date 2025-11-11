@@ -25,11 +25,6 @@ public class CourseRepository {
         return courses.stream().filter(c -> c.getId() == id).findFirst();
     }
 
-    public Optional<Course> findByTitle(String title) {
-        Optional<Course> first = courses.stream().filter(c -> c.getTitle().equals(title)).findFirst();
-        return first;
-    }
-
     public Course save(Course course) {
         course.setId(idCounter.getAndIncrement());
         boolean added = courses.add(course);
@@ -47,6 +42,15 @@ public class CourseRepository {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    public boolean delete(Integer id) {
+        return courses.removeIf(c -> c.getId() == id);
+    }
+
+    public Optional<Course> findByTitle(String title) {
+        Optional<Course> first = courses.stream().filter(c -> c.getTitle().equals(title)).findFirst();
+        return first;
+    }
+
     public List<CourseResponseDTO>  findAllByTeacher(String teacher) {
         List<Course> collect = courses.stream()
                 .filter(c -> c.getTeacher().equals(teacher))
@@ -61,4 +65,5 @@ public class CourseRepository {
                         c.getStudents()))
                 .collect(Collectors.toUnmodifiableList());
     }
+
 }
