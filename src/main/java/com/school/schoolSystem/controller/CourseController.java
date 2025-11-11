@@ -46,7 +46,7 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCourseById(
             @PathVariable
             @Min(value = 1, message = "ID must be >= 1")

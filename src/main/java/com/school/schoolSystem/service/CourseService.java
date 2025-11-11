@@ -30,7 +30,7 @@ public class CourseService {
         repo.findByTitle(courseRequest.getTitle())
             .ifPresent(c -> {
                 throw new CourseAlreadyExistsException(
-                        "Course with title '" + courseRequest.getTitle() + "' already exists"
+                        "Course with title: " + courseRequest.getTitle() + " already exists"
                 );
             });
 
@@ -68,7 +68,7 @@ public class CourseService {
         Optional<Course> foundCourse = repo.findById(id);
 
         if(foundCourse.isEmpty()) {
-            throw new CourseNotFoundException("Course with id '" + id + "' does not exists");
+            throw new CourseNotFoundException("Course with id: " + id + " does not exists");
         }
 
         return CourseResponseDTO.builder()
@@ -82,6 +82,10 @@ public class CourseService {
 
 
     public boolean deleteCourseById(Integer id) {
+        Optional<Course> foundCourse = repo.findById(id);
+        if(foundCourse.isEmpty()) {
+            throw new CourseNotFoundException("Course with id: " + id + " does not exists");
+        }
         return repo.delete(id);
     }
 
@@ -89,7 +93,7 @@ public class CourseService {
 
         Optional<Course> foundCourse = repo.findByTitle(title);
         if(foundCourse.isEmpty()) {
-            throw new CourseNotFoundException("Course with title '" + title + "' does not exists");
+            throw new CourseNotFoundException("Course with title: " + title + " does not exists");
         }
 
         return CourseResponseDTO.builder()
