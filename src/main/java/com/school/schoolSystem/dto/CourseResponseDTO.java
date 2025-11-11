@@ -15,12 +15,14 @@ public class CourseResponseDTO {
     private String teacher;
     private int maxStudents;
     private List<Student> students;
+    private boolean active;
 
-    public CourseResponseDTO(int id, String title, String teacher, int maxStudents,  List<Student> students) {
+    public CourseResponseDTO(int id, String title, String teacher, int maxStudents,  List<Student> students,  boolean active) {
         this.id = id;
         this.title = title;
         this.teacher = teacher;
         this.maxStudents = maxStudents;
         this.students = students;
+        this.active = active;
     }
 }

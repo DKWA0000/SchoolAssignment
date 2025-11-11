@@ -36,6 +36,11 @@ public class CourseController {
         return courseService.findAll();
     }
 
+    @GetMapping("/active")
+    public List<CourseResponseDTO> getAllActiveCourses() {
+        return courseService.findAllActiveCourses();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponseDTO> getCourseById(
             @PathVariable

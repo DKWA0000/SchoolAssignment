@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -46,6 +47,7 @@ public class CourseService {
                 .teacher(courseRequest.getTeacher())
                 .maxStudents(maxStudentsParsed)
                 .students(List.of())
+                .active(true)
                 .build();
 
         Course saved = repo.save(course);
@@ -56,12 +58,19 @@ public class CourseService {
                 .teacher(saved.getTeacher())
                 .maxStudents(saved.getMaxStudents())
                 .students(saved.getStudents())
+                .active(saved.isActive())
                 .build();
-
     }
 
     public List<CourseResponseDTO> findAll() {
         return repo.findAll();
+    }
+
+    public List<CourseResponseDTO> findAllActiveCourses() {
+        List<CourseResponseDTO> all = repo.findAll();
+        return all.stream()
+                .filter(c -> c.isActive())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public CourseResponseDTO findCourseById(Integer id) {
@@ -82,9 +91,11 @@ public class CourseService {
 
 
     public boolean deleteCourseById(Integer id) {
-        Optional<Course> foundCourse = repo.findById(id);
+        Optional<Course> foundCourse = repo.findByOnlyId(id);
         if(foundCourse.isEmpty()) {
             throw new CourseNotFoundException("Course with id: " + id + " does not exists");
+        } else if(!foundCourse.get().isActive()){
+            throw new CourseAlreadyExistsException("Course with id: " + id + " has been already removed from db");
         }
         return repo.delete(id);
     }

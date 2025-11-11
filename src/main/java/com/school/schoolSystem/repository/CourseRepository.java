@@ -22,6 +22,10 @@ public class CourseRepository {
     }
 
     public Optional<Course> findById(int id) {
+        return courses.stream().filter(c -> c.getId() == id && c.isActive()).findFirst();
+    }
+
+    public Optional<Course> findByOnlyId(int id) {
         return courses.stream().filter(c -> c.getId() == id).findFirst();
     }
 
@@ -38,22 +42,27 @@ public class CourseRepository {
                         c.getTitle(),
                         c.getTeacher(),
                         c.getMaxStudents(),
-                        c.getStudents()))
+                        c.getStudents(),
+                        c.isActive()))
                 .collect(Collectors.toUnmodifiableList());
     }
 
     public boolean delete(Integer id) {
-        return courses.removeIf(c -> c.getId() == id);
+        Boolean b1 = courses.stream().filter(c -> c.getId() == id).findFirst().map(u -> {
+            u.setActive(false);
+            return u.isActive();
+        }).orElseThrow();
+        return !b1;
     }
 
     public Optional<Course> findByTitle(String title) {
-        Optional<Course> first = courses.stream().filter(c -> c.getTitle().equals(title)).findFirst();
+        Optional<Course> first = courses.stream().filter(c -> c.getTitle().equals(title) && c.isActive()).findFirst();
         return first;
     }
 
     public List<CourseResponseDTO>  findAllByTeacher(String teacher) {
         List<Course> collect = courses.stream()
-                .filter(c -> c.getTeacher().equals(teacher))
+                .filter(c -> c.getTeacher().equals(teacher) && c.isActive())
                 .collect(Collectors.toUnmodifiableList());
 
         return collect.stream()
@@ -62,7 +71,8 @@ public class CourseRepository {
                         c.getTitle(),
                         c.getTeacher(),
                         c.getMaxStudents(),
-                        c.getStudents()))
+                        c.getStudents(),
+                        c.isActive()))
                 .collect(Collectors.toUnmodifiableList());
     }
 

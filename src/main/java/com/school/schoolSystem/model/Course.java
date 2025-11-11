@@ -17,6 +17,7 @@ public class Course {
     private String teacher;
     private int maxStudents;
     private List<Student> students;
+    private boolean active;
 
     @Override
     public String toString() {
@@ -26,6 +27,7 @@ public class Course {
                 ", teacher='" + teacher + '\'' +
                 ", maxStudents=" + maxStudents +
                 ", students=" + students +
+                ", active=" + active +
                 '}';
     }
 }
