@@ -14,9 +14,13 @@ public class Enrollment {
     private int enrollemtId;
 
 
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student studentId;
 
-    private int studentId;
-    private int courseId;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course courseId;
 
     @Column(name = "active", columnDefinition="BOOLEAN DEFAULT true")
     private boolean active;
@@ -24,8 +28,7 @@ public class Enrollment {
     @Column(name = "reg_date")
     private LocalDate regDate;
 
-    public Enrollment(int enrollmentId, int studentId, int courseId) {
-        this.enrollemtId = enrollmentId;
+    public Enrollment(Student studentId, Course courseId) {
         this.studentId = studentId;
         this.courseId = courseId;
         this.active = true;
@@ -40,11 +43,11 @@ public class Enrollment {
         return enrollemtId;
     }
 
-    public int getStudentId() {
+    public Student getStudentId() {
         return studentId;
     }
 
-    public int getCourseId() {
+    public Course getCourseId() {
         return courseId;
     }
 

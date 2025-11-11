@@ -40,7 +40,6 @@ public class CourseRepositoryOld {
                         c.getTitle(),
                         c.getTeacher(),
                         c.getMaxStudents(),
-                        c.getStudents(),
                         c.isActive()))
                 .collect(Collectors.toUnmodifiableList());
     }
@@ -69,7 +68,6 @@ public class CourseRepositoryOld {
                         c.getTitle(),
                         c.getTeacher(),
                         c.getMaxStudents(),
-                        c.getStudents(),
                         c.isActive()))
                 .collect(Collectors.toUnmodifiableList());
     }
