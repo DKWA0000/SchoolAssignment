@@ -1,12 +1,11 @@
 package com.school.schoolSystem.controller;
 
+import com.school.schoolSystem.dto.EnrollDTO;
+import com.school.schoolSystem.dto.EnrolledStudentsDTO;
 import com.school.schoolSystem.model.Enrollment;
 import com.school.schoolSystem.service.EnrollmentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +18,15 @@ public class EnrollmentController {
         this.service = service;
     }
 
-    @PostMapping("/enrollments/{courseId}")
-    public ResponseEntity<Enrollment> getEnrolledStudents(@PathVariable int courseId){
-        return ResponseEntity.ok(service.getEnrolledStudents(courseId));
+    @PutMapping("/enrollments/enroll")
+    public ResponseEntity<String> EnrollInCourse(@RequestBody EnrollDTO dto){
+        return ResponseEntity.ok(service.addEnrollment(dto));
+    }
+
+    @GetMapping("/enrollments/{courseId}")
+    public ResponseEntity<EnrolledStudentsDTO> getEnrolledStudents(@PathVariable int courseId){
+        return service.getEnrolledStudents(courseId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
