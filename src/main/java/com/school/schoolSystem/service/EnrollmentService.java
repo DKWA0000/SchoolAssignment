@@ -1,6 +1,9 @@
 package com.school.schoolSystem.service;
 
 import com.school.schoolSystem.dto.EnrollDTO;
+import com.school.schoolSystem.dto.EnrolledStudentsDTO;
+import com.school.schoolSystem.dto.StudentEnrollDTO;
+import com.school.schoolSystem.dto.StudentResponseDTO;
 import com.school.schoolSystem.model.Course;
 import com.school.schoolSystem.model.Enrollment;
 import com.school.schoolSystem.model.Student;
@@ -25,32 +28,31 @@ public class EnrollmentService {
         this.studentRepository = studentRepository;
     }
 
-    public int addEnrollment(EnrollDTO dto){
-//        if(!repo.checkIfStudentRegistered(dto)){
-//            repo.addEnrollment(dto);
-//            return 1;
-//        }
-        return 2;
-    }
+    public String addEnrollment(EnrollDTO dto){
+        Optional<Student> studentTmp = studentRepository.findById(dto.getStudentId());
+        Optional<Course> courseTmp = courseRepository.findById(dto.getCourseId());
 
-    public int deleteEnrollment(EnrollDTO dto){
-//        if(!repo.checkIfStudentRegistered(dto)){
-//            repo.makeEnrollmentInactive(dto);
-//            return 1;
-//        }
-        return 2;
-    }
-
-    public Enrollment getEnrolledStudents(int courseId){
-        Student student = new Student("name", 12, "email@em.com");
-        Student save1 = studentRepository.save(student);
-        Optional<Course> byId = courseRepository.findById(courseId);
-        Enrollment save = new Enrollment();
-        if(byId.isPresent()){
-            save = repo.save(new Enrollment(save1, byId.get()));
-            System.out.println(save);
+        if(studentTmp.isPresent() && courseTmp.isPresent()){
+            repo.save(new Enrollment(studentTmp.get(), courseTmp.get()));
+            return "Student enrolled in course: " + courseTmp.get().getTitle();
         }
+        return "student already registered in course: " + courseTmp.get().getTitle();
+    }
 
-        return save;
+    public Optional<EnrolledStudentsDTO> getEnrolledStudents(int courseId){
+        Optional<Course> tmp = courseRepository.findById(courseId);
+        if(tmp.isPresent()){
+            List<Enrollment> enrollTmp = repo.findAll().stream()
+                    .filter(enrollment -> enrollment.getCourseId().getId() == courseId).toList();
+            List<StudentEnrollDTO> tmpList = enrollTmp.stream()
+                    .map(this::buildStudentDTO).toList();
+            return Optional.of(new EnrolledStudentsDTO(tmp.get().getTitle(), tmpList));
+        }
+        return Optional.empty();
+    }
+
+    public StudentEnrollDTO buildStudentDTO(Enrollment enrollment){
+         Student tmp = studentRepository.findById(enrollment.getStudentId().getId()).get();
+         return new StudentEnrollDTO(tmp.getName(), tmp.getAge(), tmp.getEmail(), enrollment.getRegDate());
     }
 }

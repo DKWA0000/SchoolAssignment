@@ -1,8 +1,13 @@
 package com.school.schoolSystem.dto;
 
+import jakarta.validation.constraints.PositiveOrZero;
+
 public class EnrollDTO {
 
-    private int studentId, courseId;
+    @PositiveOrZero
+    private int studentId;
+    @PositiveOrZero
+    private int courseId;
 
     public EnrollDTO(int studentId, int courseId) {
         this.studentId = studentId;
