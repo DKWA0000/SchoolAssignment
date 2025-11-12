@@ -114,8 +114,9 @@ public class CourseService {
         } else if(!foundCourse.get().isActive()){
             throw new CourseAlreadyExistsException("Course with id: " + id + " has been already removed from db");
         }
-        repository.delete(foundCourse.get());
-        return true;
+        foundCourse.get().setActive(false);
+        repository.save(foundCourse.get());
+        return !foundCourse.get().isActive();
     }
 
     public CourseResponseDTO findCourseByTitle(String title) {
