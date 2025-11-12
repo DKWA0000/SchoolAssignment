@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> body = new HashMap<>();
         body.put("status", HttpStatus.CONFLICT.value());
-        body.put("error", "Course already exists");
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
