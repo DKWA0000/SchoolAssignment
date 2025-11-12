@@ -1,10 +1,22 @@
 package com.school.schoolSystem.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "students")
 public class Student {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(length = 100)
     private String name;
+
+    @Column(length = 100)
     private int age;
+
+    @Column(length = 100)
     private String email;
 
     public Student(int id, String name, int age, String email) {
@@ -12,6 +24,16 @@ public class Student {
         this.name = name;
         this.age = age;
         this.email = email;
+    }
+
+    public Student(String name, int age, String email) {
+        this.name = name;
+        this.age = age;
+        this.email = email;
+    }
+
+    public Student() {
+
     }
 
     public int getId() {

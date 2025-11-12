@@ -2,11 +2,11 @@ package com.school.schoolSystem.repository;
 
 import com.school.schoolSystem.dto.StudentResponseDTO;
 import com.school.schoolSystem.model.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 public class StudentRepository {
 
     private List<Student> students;

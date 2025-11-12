@@ -1,9 +1,11 @@
 package com.school.schoolSystem.controller;
 
+import com.school.schoolSystem.model.Enrollment;
 import com.school.schoolSystem.service.EnrollmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class EnrollmentController {
         this.service = service;
     }
 
-    @GetMapping("/enrollments/{courseId}")
-    public ResponseEntity<List<Integer>> getEnrolledStudents(@PathVariable int courseId){
+    @PostMapping("/enrollments/{courseId}")
+    public ResponseEntity<Enrollment> getEnrolledStudents(@PathVariable int courseId){
         return ResponseEntity.ok(service.getEnrolledStudents(courseId));
     }
 }
