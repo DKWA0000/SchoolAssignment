@@ -9,6 +9,8 @@ import com.school.schoolSystem.repository.EnrollmentRepository;
 import com.school.schoolSystem.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +38,17 @@ public class EnrollmentService {
         return "Please Enter a valid (studentId, courseId) combination";
     }
 
+    public String disEnrollCourse(EnrollDTO dto){
+        if(repo.findEnrollment(dto.getStudentId(), dto.getCourseId()).isPresent()) {
+            int tmp = repo.findEnrollment(dto.getStudentId(), dto.getCourseId()).get();
+            repo.save(new Enrollment(tmp, repo.findById(tmp).get().getStudentId(),
+                    repo.findById(tmp).get().getCourseId(),
+                    repo.findById(tmp).get().getGrade(), false));
+            return "Student has been dis-enrolled";
+        }
+        return "enrollment is not active";
+    }
+
     public String addEnrollment(EnrollDTO dto){
         if(checkIfEnrollmentIsValid(dto)) {
             Optional<Student> studentTmp = studentRepository.findById(dto.getStudentId());
@@ -49,11 +62,45 @@ public class EnrollmentService {
         return "Enrollment data is invalid";
     }
 
+    public List<Optional<EnrolledStudentsDTO>> getAllEnrolledByGrade(int grade){
+        List<Integer> courses = repo.getAllCourseIds();
+        List<Optional<EnrolledStudentsDTO>> tmp = new ArrayList<>();
+        for(int i = 0; i < courses.size(); i++){
+            tmp.add(getEnrolledByGrade(courses.get(i), grade));
+            System.out.println(tmp.size());
+        }
+        return tmp;
+    }
+
+    public List<Optional<EnrolledStudentsDTO>> getAllEnrolledByDate(String date){
+        List<Integer> courses = repo.getAllCourseIds();
+        List<Optional<EnrolledStudentsDTO>> tmp = new ArrayList<>();
+        for(int i = 0; i < courses.size(); i++){
+            tmp.add(getEnrolledByDate(courses.get(i), date));
+            System.out.println(tmp.size());
+        }
+        return tmp;
+    }
+
+    public Optional<EnrolledStudentsDTO> getEnrolledByGrade(int courseId, int grade){
+        return courseRepository.findById(courseId)
+                .map(course -> new EnrolledStudentsDTO(course.getTitle(),
+                 repo.getEnrollmentsByGrade(courseId, grade).stream()
+                 .map(this::buildStudentDTO).toList()));
+    }
+
     public Optional<EnrolledStudentsDTO> getEnrolledStudents(int courseId){
         return courseRepository.findById(courseId)
                 .map(course -> new EnrolledStudentsDTO(course.getTitle(),
                 repo.getEnrollmentsByCourse(courseId).stream()
                 .map(this::buildStudentDTO).toList()));
+    }
+
+    public Optional<EnrolledStudentsDTO> getEnrolledByDate(int courseId, String date){
+        return courseRepository.findById(courseId)
+                .map(course -> new EnrolledStudentsDTO(course.getTitle(),
+                        repo.getEnrollmentsByDate(date).stream()
+                                .map(this::buildStudentDTO).toList()));
     }
 
     public StudentEnrollDTO buildStudentDTO(Enrollment enrollment){
@@ -63,7 +110,10 @@ public class EnrollmentService {
     }
 
     private boolean checkIfEnrollmentIsValid(EnrollDTO dto){
-        return repo.findEnrollment(dto.getStudentId(), dto.getCourseId()).isEmpty() &&
-               repo.nrEnrollmentsCourse(dto.getCourseId()).isEmpty();
+        return  ((repo.nrEnrollmentsCourse(dto.getCourseId()).isEmpty()) ||
+                    (repo.nrEnrollmentsCourse(dto.getCourseId()).get() == 1) ||
+                    (repo.checkCourseStatus(dto.getCourseId()).get() == 0)) &&
+                (courseRepository.findById(dto.getCourseId()).isPresent() &&
+                    (studentRepository.findById(dto.getStudentId()).isPresent()));
     }
 }

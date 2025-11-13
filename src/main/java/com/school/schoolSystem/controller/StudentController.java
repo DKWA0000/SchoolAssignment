@@ -30,7 +30,7 @@ public class StudentController {
         return service.findAll();
     }
 
-    @GetMapping("/get/name/{name}")
+   /* @GetMapping("/get/name/{name}")
     public ResponseEntity<StudentResponseDTO>getStudentsByName(@PathVariable String name){
         StudentResponseDTO student = service.findByName(name).getFirst();
         return ResponseEntity.ok(student);
@@ -40,7 +40,7 @@ public class StudentController {
     public ResponseEntity<StudentResponseDTO> getStudentsByAge(@PathVariable String age){
         StudentResponseDTO student = service.findByAge(Integer.parseInt(age)).getFirst();
         return ResponseEntity.ok(student);
-    }
+    }*/
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteStudent(@PathVariable String id){
