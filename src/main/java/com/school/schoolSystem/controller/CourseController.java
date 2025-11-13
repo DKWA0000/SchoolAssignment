@@ -82,15 +82,6 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CourseResponseDTO>updateCourseById(@PathVariable int id,
-                                                             @RequestBody CourseRequestDTO courseRequestDTO){
-        CourseResponseDTO response = courseService.updateCourse(id, courseRequestDTO);
-        return response !=null ?
-                ResponseEntity.ok(response) :
-                ResponseEntity.notFound().build();
-
-    }
 
     @PatchMapping ("/{id}")
     public ResponseEntity<CourseResponseDTO>patchCourseById(@PathVariable int id,

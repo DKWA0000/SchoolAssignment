@@ -152,20 +152,6 @@ public class CourseService {
         return response;
     }
 
-    public CourseResponseDTO updateCourse(int id, CourseRequestDTO courseRequestDTO) {
-        Optional<Course> courseToUpdate = repository.findById(id);
-
-        if (courseToUpdate.isPresent()) {
-            Course course = courseToUpdate.get();
-            course.setTitle(courseRequestDTO.getTitle());
-            course.setTeacher(courseRequestDTO.getTeacher());
-            course.setMaxStudents(Integer.parseInt(courseRequestDTO.getMaxStudents()));
-            repository.save(courseToUpdate.get());
-            return courseResponseDTO(course);
-        }
-        return null;
-
-    }
 
     public CourseResponseDTO patchCourse(int id, CoursePatchRequestDTO requestDTO) {
         Optional<Course> courseToUpdate = repository.findById(id);
