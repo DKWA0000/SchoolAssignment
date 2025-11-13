@@ -4,9 +4,11 @@ package com.school.schoolSystem.dto;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 public class CourseRequestDTO {
 
     @NotEmpty(message = "Course title is mandatory")
@@ -27,27 +29,5 @@ public class CourseRequestDTO {
         this.maxStudents = maxStudents;
     }
 
-    public String getMaxStudents() {
-        return maxStudents;
-    }
 
-    public void setMaxStudents(String maxStudents) {
-        this.maxStudents = maxStudents;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
 }

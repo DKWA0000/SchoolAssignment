@@ -1,5 +1,6 @@
 package com.school.schoolSystem.service;
 
+import com.school.schoolSystem.dto.CoursePatchRequestDTO;
 import com.school.schoolSystem.dto.CourseRequestDTO;
 import com.school.schoolSystem.dto.CourseResponseDTO;
 import com.school.schoolSystem.exception.CourseAlreadyExistsException;
@@ -155,22 +156,46 @@ public class CourseService {
         Optional<Course> courseToUpdate = repository.findById(id);
 
         if (courseToUpdate.isPresent()) {
-            courseToUpdate.get().setTitle(courseRequestDTO.getTitle());
-            courseToUpdate.get().setTeacher(courseRequestDTO.getTeacher());
-            courseToUpdate.get().setMaxStudents(Integer.parseInt(courseRequestDTO.getMaxStudents()));
+            Course course = courseToUpdate.get();
+            course.setTitle(courseRequestDTO.getTitle());
+            course.setTeacher(courseRequestDTO.getTeacher());
+            course.setMaxStudents(Integer.parseInt(courseRequestDTO.getMaxStudents()));
             repository.save(courseToUpdate.get());
-            return CourseResponseDTO.builder()
-                    .id(courseToUpdate.get().getId())
-                    .title(courseToUpdate.get().getTitle())
-                    .teacher(courseToUpdate.get().getTeacher())
-                    .maxStudents(courseToUpdate.get().getMaxStudents())
-                    .active(courseToUpdate.get().isActive())
-                    .build();
+            return courseResponseDTO(course);
         }
         return null;
 
     }
 
+    public CourseResponseDTO patchCourse(int id, CoursePatchRequestDTO requestDTO) {
+        Optional<Course> courseToUpdate = repository.findById(id);
+        if (courseToUpdate.isPresent()){
+            Course course =courseToUpdate.get();
+            if(requestDTO.getTitle() != null){
+                course.setTitle(requestDTO.getTitle());
+            }
+            if(requestDTO.getTeacher() != null){
+                course.setTeacher(requestDTO.getTeacher());
+            }
+            if(requestDTO.getMaxStudents() != null){
+                course.setMaxStudents(Integer.parseInt(requestDTO.getMaxStudents()));
+            }
+            repository.save(course);
+            return courseResponseDTO(course);
 
+        }
+        return null;
+
+    }
+
+    private CourseResponseDTO courseResponseDTO(Course course) {
+        return CourseResponseDTO.builder()
+                .id(course.getId())
+                .title(course.getTitle())
+                .teacher(course.getTeacher())
+                .maxStudents(course.getMaxStudents())
+                .active(course.isActive())
+                .build();
+    }
 
 }
