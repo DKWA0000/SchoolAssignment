@@ -8,7 +8,9 @@ import com.school.schoolSystem.service.EnrollmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EnrollmentController {
@@ -34,5 +36,25 @@ public class EnrollmentController {
     @PutMapping("/enrollments/grade")
     public ResponseEntity<String> setGradeForEnrollment(@RequestBody EnrollGradeDTO dto){
         return ResponseEntity.ok(service.gradeStudent(dto));
+    }
+
+    @PutMapping("/enrollments/disEnroll")
+    public ResponseEntity<String> disEnrollCourse(@RequestBody EnrollDTO dto){
+        return ResponseEntity.ok(service.disEnrollCourse(dto));
+    }
+
+    @GetMapping("/enrollments/getByGrade/{grade}")
+    public ResponseEntity<List<Optional<EnrolledStudentsDTO>>> getEnrolledByGrade(@PathVariable int grade){
+        return ResponseEntity.ok(service.getAllEnrolledByGrade(grade));
+    }
+
+    @GetMapping("/enrollments/summary")
+    public ResponseEntity<List<Optional<EnrolledStudentsDTO>>> getEnrolledByGrade(){
+        return ResponseEntity.ok(service.getAllEnrolledByGrade(-2));
+    }
+
+    @GetMapping("/enrollments/getByDate/{date}")
+    public ResponseEntity<List<Optional<EnrolledStudentsDTO>>> getEnrollmentsByDate(String date){
+        return ResponseEntity.ok(service.getAllEnrolledByDate(date));
     }
 }

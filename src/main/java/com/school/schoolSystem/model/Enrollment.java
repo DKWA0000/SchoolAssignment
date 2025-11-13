@@ -18,7 +18,7 @@ public class Enrollment {
     private int enrollemtId;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     private Student studentId;
 
