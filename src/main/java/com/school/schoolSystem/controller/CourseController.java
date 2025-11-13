@@ -1,5 +1,6 @@
 package com.school.schoolSystem.controller;
 
+import com.school.schoolSystem.dto.CoursePatchRequestDTO;
 import com.school.schoolSystem.dto.CourseRequestDTO;
 import com.school.schoolSystem.dto.CourseResponseDTO;
 import com.school.schoolSystem.service.CourseService;
@@ -80,4 +81,33 @@ public class CourseController {
         List<CourseResponseDTO> response = courseService.findCourseByTeacher(teacher);
         return ResponseEntity.ok(response);
     }
+
+
+    @PatchMapping ("/{id}")
+    public ResponseEntity<CourseResponseDTO>patchCourseById(@PathVariable int id,
+                                                             @RequestBody CoursePatchRequestDTO coursePatchRequestDTO){
+        CourseResponseDTO response = courseService.patchCourse(id, coursePatchRequestDTO);
+        return response !=null ?
+                ResponseEntity.ok(response) :
+                ResponseEntity.notFound().build();
+
+    }
+
+    @PatchMapping ("/param/{id}")
+    public ResponseEntity<CourseResponseDTO>patchCourseByIdParam
+            (@PathVariable int id,
+             @RequestParam(required = false) String title,
+             @RequestParam(required = false) String teacher,
+             @RequestParam(required = false) String maxStudentNum) {
+        CoursePatchRequestDTO coursePatchRequestDTO = new CoursePatchRequestDTO(title, teacher,maxStudentNum);
+        CourseResponseDTO response = courseService.patchCourse(id, coursePatchRequestDTO);
+        return response !=null ?
+                ResponseEntity.ok(response) :
+                ResponseEntity.notFound().build();
+    }
+
+
+
+
 }
+

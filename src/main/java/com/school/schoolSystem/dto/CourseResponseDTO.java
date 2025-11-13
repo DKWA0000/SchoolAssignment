@@ -3,11 +3,13 @@ package com.school.schoolSystem.dto;
 import com.school.schoolSystem.model.Student;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Builder
 @Getter
+@Setter
 public class CourseResponseDTO {
 
     private int id;
@@ -23,4 +25,5 @@ public class CourseResponseDTO {
         this.maxStudents = maxStudents;
         this.active = active;
     }
+
 }

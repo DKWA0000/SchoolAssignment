@@ -1,5 +1,6 @@
 package com.school.schoolSystem.service;
 
+import com.school.schoolSystem.dto.CoursePatchRequestDTO;
 import com.school.schoolSystem.dto.CourseRequestDTO;
 import com.school.schoolSystem.dto.CourseResponseDTO;
 import com.school.schoolSystem.exception.CourseAlreadyExistsException;
@@ -25,11 +26,11 @@ public class CourseService {
     public CourseResponseDTO createCourse(CourseRequestDTO courseRequest) {
 
         repository.findByTitle(courseRequest.getTitle())
-            .ifPresent(c -> {
-                throw new CourseAlreadyExistsException(
-                        "Course with title: " + courseRequest.getTitle() + " already exists"
-                );
-            });
+                .ifPresent(c -> {
+                    throw new CourseAlreadyExistsException(
+                            "Course with title: " + courseRequest.getTitle() + " already exists"
+                    );
+                });
 
         int maxStudentsParsed;
         try {
@@ -59,7 +60,7 @@ public class CourseService {
     public List<CourseResponseDTO> findAll() {
         List<Course> all = repository.findAll();
         List<CourseResponseDTO> response = new ArrayList<>();
-        for(Course entity : all) {
+        for (Course entity : all) {
             response.add(CourseResponseDTO.builder()
                     .id(entity.getId())
                     .title(entity.getTitle())
@@ -75,8 +76,8 @@ public class CourseService {
         List<Course> all = repository.findAll();
         List<CourseResponseDTO> response = new ArrayList<>();
 
-        for(Course entity : all) {
-            if(entity.isActive()) {
+        for (Course entity : all) {
+            if (entity.isActive()) {
                 response.add(CourseResponseDTO.builder()
                         .id(entity.getId())
                         .title(entity.getTitle())
@@ -92,7 +93,7 @@ public class CourseService {
     public CourseResponseDTO findCourseById(Integer id) {
         Optional<Course> foundCourse = repository.findById(id);
 
-        if(foundCourse.isEmpty()) {
+        if (foundCourse.isEmpty()) {
             throw new CourseNotFoundException("Course with id: " + id + " does not exists");
         }
 
@@ -108,9 +109,9 @@ public class CourseService {
     public boolean deleteCourseById(Integer id) {
         /*todo*/
         Optional<Course> foundCourse = repository.findById(id); //
-        if(foundCourse.isEmpty()) {
+        if (foundCourse.isEmpty()) {
             throw new CourseNotFoundException("Course with id: " + id + " does not exists");
-        } else if(!foundCourse.get().isActive()){
+        } else if (!foundCourse.get().isActive()) {
             throw new CourseAlreadyExistsException("Course with id: " + id + " has been already removed from db");
         }
         foundCourse.get().setActive(false);
@@ -121,7 +122,7 @@ public class CourseService {
     public CourseResponseDTO findCourseByTitle(String title) {
 
         Optional<Course> foundCourse = repository.findByTitle(title);
-        if(foundCourse.isEmpty()) {
+        if (foundCourse.isEmpty()) {
             throw new CourseNotFoundException("Course with title: " + title + " does not exists");
         }
 
@@ -133,12 +134,12 @@ public class CourseService {
                 .build();
     }
 
-    public List<CourseResponseDTO> findCourseByTeacher( String teacher) {
+    public List<CourseResponseDTO> findCourseByTeacher(String teacher) {
         List<Course> allByTeacher = repository.findAllByTeacher(teacher);
         List<CourseResponseDTO> response = new ArrayList<>();
 
-        for(Course entity : allByTeacher) {
-            if(entity.isActive()) {
+        for (Course entity : allByTeacher) {
+            if (entity.isActive()) {
                 response.add(CourseResponseDTO.builder()
                         .id(entity.getId())
                         .title(entity.getTitle())
@@ -149,6 +150,38 @@ public class CourseService {
             }
         }
         return response;
+    }
+
+
+    public CourseResponseDTO patchCourse(int id, CoursePatchRequestDTO requestDTO) {
+        Optional<Course> courseToUpdate = repository.findById(id);
+        if (courseToUpdate.isPresent()){
+            Course course =courseToUpdate.get();
+            if(requestDTO.getTitle() != null){
+                course.setTitle(requestDTO.getTitle());
+            }
+            if(requestDTO.getTeacher() != null){
+                course.setTeacher(requestDTO.getTeacher());
+            }
+            if(requestDTO.getMaxStudents() != null){
+                course.setMaxStudents(Integer.parseInt(requestDTO.getMaxStudents()));
+            }
+            repository.save(course);
+            return courseResponseDTO(course);
+
+        }
+        return null;
+
+    }
+
+    private CourseResponseDTO courseResponseDTO(Course course) {
+        return CourseResponseDTO.builder()
+                .id(course.getId())
+                .title(course.getTitle())
+                .teacher(course.getTeacher())
+                .maxStudents(course.getMaxStudents())
+                .active(course.isActive())
+                .build();
     }
 
 }
