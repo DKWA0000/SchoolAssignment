@@ -3,7 +3,7 @@ package com.school.schoolSystem.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "students")
+@Table(name = "students", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Student {
 
     @Id

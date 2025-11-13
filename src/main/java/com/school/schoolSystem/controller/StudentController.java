@@ -23,16 +23,6 @@ public class StudentController {
         this.service = service;
     }
 
-    /*
-    // Replaced by createStudent()
-    @PostMapping("/add/{name}/{age}/{email}")
-    public ResponseEntity<Boolean> addStudent(@PathVariable String name, @PathVariable String age, @PathVariable String email){
-        long id = service.findAll().stream().count() + 1;
-        Student student = new Student((int) id, name, Integer.parseInt(age), email);
-        return ResponseEntity.ok(true);
-    }
-    */
-
     @GetMapping("/all")
     public List<StudentResponseDTO> getAllStudents() {
         return service.findAll();
