@@ -102,6 +102,7 @@ public class CourseService {
                 .title(foundCourse.get().getTitle())
                 .teacher(foundCourse.get().getTeacher())
                 .maxStudents(foundCourse.get().getMaxStudents())
+                .active(foundCourse.get().isActive())
                 .build();
     }
 
