@@ -110,10 +110,11 @@ public class EnrollmentService {
     }
 
     private boolean checkIfEnrollmentIsValid(EnrollDTO dto){
-        return  ((repo.nrEnrollmentsCourse(dto.getCourseId()).isEmpty()) ||
+        return  repo.findEnrollment(dto.getStudentId(), dto.getCourseId()).isEmpty() &&
+                (((repo.nrEnrollmentsCourse(dto.getCourseId()).isEmpty()) ||
                     (repo.nrEnrollmentsCourse(dto.getCourseId()).get() == 1) ||
                     (repo.checkCourseStatus(dto.getCourseId()).get() == 0)) &&
                 (courseRepository.findById(dto.getCourseId()).isPresent() &&
-                    (studentRepository.findById(dto.getStudentId()).isPresent()));
+                    (studentRepository.findById(dto.getStudentId()).isPresent())));
     }
 }

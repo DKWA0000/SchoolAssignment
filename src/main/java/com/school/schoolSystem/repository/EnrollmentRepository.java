@@ -10,10 +10,11 @@ import java.util.Optional;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer> {
 
-    @NativeQuery(value = "SELECT enrollment_id FROM enrollments " +
-                            "JOIN courses ON (course_id = id)" +
-                            " WHERE (student_id = ?1) AND (course_id = ?2) " +
-                            "AND (enrollments.active = 1)")
+    @NativeQuery("SELECT enrollment_id FROM enrollments " +
+                      "JOIN courses ON (course_id = id)" +
+                      " WHERE (student_id = ?1) AND (course_id = ?2) " +
+                      "AND (enrollments.active = 1)" +
+                      "LIMIT 1")
     Optional<Integer> findEnrollment(int studentId, int courseId);
 
 
