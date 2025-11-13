@@ -149,7 +149,7 @@ public class CourseService {
     }
 
 
-    public CourseResponseDTO patchCourse(int id, CoursePatchRequestDTO requestDTO) {
+    public CourseResponseDTO patchCourse(Integer id, CoursePatchRequestDTO requestDTO) {
         Optional<Course> courseToUpdate = repository.findById(id);
         if (courseToUpdate.isPresent()){
             Course course =courseToUpdate.get();

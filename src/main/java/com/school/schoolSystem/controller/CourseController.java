@@ -7,6 +7,8 @@ import com.school.schoolSystem.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -84,8 +86,8 @@ public class CourseController {
 
 
     @PatchMapping ("/{id}")
-    public ResponseEntity<CourseResponseDTO>patchCourseById(@PathVariable int id,
-                                                             @RequestBody CoursePatchRequestDTO coursePatchRequestDTO){
+    public ResponseEntity<CourseResponseDTO>patchCourseById(@PathVariable @Positive Integer id,
+                                                             @Valid @RequestBody CoursePatchRequestDTO coursePatchRequestDTO){
         CourseResponseDTO response = courseService.patchCourse(id, coursePatchRequestDTO);
         return response !=null ?
                 ResponseEntity.ok(response) :
@@ -95,10 +97,11 @@ public class CourseController {
 
     @PatchMapping ("/param/{id}")
     public ResponseEntity<CourseResponseDTO>patchCourseByIdParam
-            (@PathVariable int id,
+            (@PathVariable @Positive Integer id,
              @RequestParam(required = false) String title,
              @RequestParam(required = false) String teacher,
-             @RequestParam(required = false) String maxStudents) {
+             @RequestParam(required = false) @Pattern(regexp = "\\d+", message = "maxStudents must be numeric")
+             @Positive String maxStudents) {
         CoursePatchRequestDTO coursePatchRequestDTO = new CoursePatchRequestDTO(title, teacher,maxStudents);
         CourseResponseDTO response = courseService.patchCourse(id, coursePatchRequestDTO);
         return response !=null ?
