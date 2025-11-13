@@ -63,12 +63,12 @@ public class CourseController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<CourseResponseDTO> getCourseByTitle(
+    public ResponseEntity<List<CourseResponseDTO>> getCourseByTitle(
             @RequestParam
             @NotBlank(message = "Title is mandatory")
             String title
     ) {
-        CourseResponseDTO response = courseService.findCourseByTitle(title);
+        List<CourseResponseDTO> response = courseService.findCoursesByTitle(title);
         return ResponseEntity.ok(response);
     }
 
