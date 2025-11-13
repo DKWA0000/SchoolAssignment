@@ -98,8 +98,8 @@ public class CourseController {
             (@PathVariable int id,
              @RequestParam(required = false) String title,
              @RequestParam(required = false) String teacher,
-             @RequestParam(required = false) String maxStudentNum) {
-        CoursePatchRequestDTO coursePatchRequestDTO = new CoursePatchRequestDTO(title, teacher,maxStudentNum);
+             @RequestParam(required = false) String maxStudents) {
+        CoursePatchRequestDTO coursePatchRequestDTO = new CoursePatchRequestDTO(title, teacher,maxStudents);
         CourseResponseDTO response = courseService.patchCourse(id, coursePatchRequestDTO);
         return response !=null ?
                 ResponseEntity.ok(response) :
