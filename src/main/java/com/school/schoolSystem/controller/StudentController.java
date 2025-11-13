@@ -31,17 +31,15 @@ public class StudentController {
     }
 
     @GetMapping("/get/name/{name}")
-    public ResponseEntity<StudentResponseDTO>getStudentsByName(@PathVariable String name){
-//        StudentResponseDTO student = service.findByName(name).getFirst();
-//        return ResponseEntity.ok(student);
-        return null;
+    public ResponseEntity<List<StudentResponseDTO>>getStudentsByName(@PathVariable String name){
+        List<StudentResponseDTO> students = service.findByName(name);
+        return ResponseEntity.ok(students);
     }
 
     @GetMapping("/get/age/{age}")
-    public ResponseEntity<StudentResponseDTO> getStudentsByAge(@PathVariable String age){
-//        StudentResponseDTO student = service.findByAge(Integer.parseInt(age)).getFirst();
-//        return ResponseEntity.ok(student);
-        return null;
+    public ResponseEntity<List<StudentResponseDTO>> getStudentsByAge(@PathVariable String age){
+        List<StudentResponseDTO> students = service.findByAge(Integer.parseInt(age));
+        return ResponseEntity.ok(students);
     }
 
     @DeleteMapping("/delete/{id}")
