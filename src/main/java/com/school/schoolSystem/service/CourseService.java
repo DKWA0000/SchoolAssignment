@@ -120,37 +120,32 @@ public class CourseService {
         return !foundCourse.get().isActive();
     }
 
-    public CourseResponseDTO findCourseByTitle(String title) {
+    public List<CourseResponseDTO> findCoursesByTitle(String title) {
 
-        Optional<Course> foundCourse = repository.findByTitle(title);
-        if (foundCourse.isEmpty()) {
-            throw new CourseNotFoundException("Course with title: " + title + " does not exists");
+        List<Course> foundCourses = repository.findAllByTitle(title.toLowerCase());
+        if (foundCourses.isEmpty()) {
+            throw new CourseNotFoundException("No course with title: " + title.toLowerCase() + " found");
         }
 
-        return CourseResponseDTO.builder()
-                .id(foundCourse.get().getId())
-                .title(foundCourse.get().getTitle())
-                .teacher(foundCourse.get().getTeacher())
-                .maxStudents(foundCourse.get().getMaxStudents())
-                .build();
+        List<CourseResponseDTO> responseDTOS = foundCourses.stream()
+                .filter(Course::isActive)
+                .map(c -> courseResponseDTO(c))
+                .toList();
+        return responseDTOS;
     }
 
     public List<CourseResponseDTO> findCourseByTeacher(String teacher) {
-        List<Course> allByTeacher = repository.findAllByTeacher(teacher);
-        List<CourseResponseDTO> response = new ArrayList<>();
 
-        for (Course entity : allByTeacher) {
-            if (entity.isActive()) {
-                response.add(CourseResponseDTO.builder()
-                        .id(entity.getId())
-                        .title(entity.getTitle())
-                        .teacher(entity.getTeacher())
-                        .maxStudents(entity.getMaxStudents())
-                        .active(entity.isActive())
-                        .build());
-            }
+        List<Course> foundCourses = repository.findAllByTeacher(teacher.toLowerCase());
+        if (foundCourses.isEmpty()) {
+            throw new CourseNotFoundException("No course found by teacher: " + teacher.toLowerCase());
         }
-        return response;
+
+        List<CourseResponseDTO> responseDTOS = foundCourses.stream()
+                .filter(Course::isActive)
+                .map(c -> courseResponseDTO(c))
+                .toList();
+        return responseDTOS;
     }
 
 
