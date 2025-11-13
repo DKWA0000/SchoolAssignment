@@ -9,13 +9,15 @@ public class StudentEnrollDTO {
     private String email;
     private LocalDate date;
     private boolean active;
+    private int grade;
 
-    public StudentEnrollDTO(String name, int age, String email, LocalDate date) {
+    public StudentEnrollDTO(String name, int age, String email, LocalDate date, boolean active, int grade) {
         this.name = name;
         this.age = age;
         this.email = email;
         this.date = date;
-        this.active = true;
+        this.active = active;
+        this.grade = grade;
     }
 
     public boolean isActive() {
@@ -38,13 +40,23 @@ public class StudentEnrollDTO {
         return email;
     }
 
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
     @Override
     public String toString() {
-        return "StudentResponseDTO{" +
+        return "StudentEnrollDTO{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +
+                ", date=" + date +
                 ", active=" + active +
+                ", grade=" + grade +
                 '}';
     }
 }

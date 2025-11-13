@@ -29,11 +29,24 @@ public class Enrollment {
     @Column(name = "reg_date")
     private LocalDate regDate;
 
+    @Column(name = "course_grade")
+    private int grade;
+
     public Enrollment(Student studentId, Course courseId) {
         this.studentId = studentId;
         this.courseId = courseId;
         this.active = true;
         this.regDate = LocalDate.now();
+        this.grade = -1;
+    }
+
+    public Enrollment(int enrollemtId,Student studentId, Course courseId, int grade, boolean active) {
+        this.enrollemtId = enrollemtId;
+        this.studentId = studentId;
+        this.courseId = courseId;
+        this.active = active;
+        this.regDate = LocalDate.now();
+        this.grade = grade;
     }
 
     public Enrollment() {
@@ -64,6 +77,14 @@ public class Enrollment {
         return regDate;
     }
 
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
     @Override
     public String toString() {
         return "Enrollment{" +
@@ -72,6 +93,7 @@ public class Enrollment {
                 ", courseId=" + courseId +
                 ", active=" + active +
                 ", regDate=" + regDate +
+                ", grade=" + grade +
                 '}';
     }
 }

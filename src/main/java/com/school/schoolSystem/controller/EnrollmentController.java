@@ -1,6 +1,7 @@
 package com.school.schoolSystem.controller;
 
 import com.school.schoolSystem.dto.EnrollDTO;
+import com.school.schoolSystem.dto.EnrollGradeDTO;
 import com.school.schoolSystem.dto.EnrolledStudentsDTO;
 import com.school.schoolSystem.model.Enrollment;
 import com.school.schoolSystem.service.EnrollmentService;
@@ -18,7 +19,7 @@ public class EnrollmentController {
         this.service = service;
     }
 
-    @PutMapping("/enrollments/enroll")
+    @PostMapping("/enrollments/enroll")
     public ResponseEntity<String> EnrollInCourse(@RequestBody EnrollDTO dto){
         return ResponseEntity.ok(service.addEnrollment(dto));
     }
@@ -28,5 +29,10 @@ public class EnrollmentController {
         return service.getEnrolledStudents(courseId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/enrollments/grade")
+    public ResponseEntity<String> setGradeForEnrollment(@RequestBody EnrollGradeDTO dto){
+        return ResponseEntity.ok(service.gradeStudent(dto));
     }
 }
