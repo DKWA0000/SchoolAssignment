@@ -2,6 +2,7 @@ package com.school.schoolSystem.repository;
 
 import com.school.schoolSystem.model.Enrollment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
 
 import java.util.List;
@@ -42,4 +43,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
                    "WHERE (reg_date > ?1)")
     List<Enrollment> getEnrollmentsByDate(String date);
 
+    @Modifying
+    @NativeQuery("DELETE FROM enrollments " +
+            "WHERE (student_id = ?1)")
+    void deleteEnrollmentsWhereStudentId(int studentId);
 }
