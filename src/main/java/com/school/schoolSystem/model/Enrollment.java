@@ -1,6 +1,8 @@
 package com.school.schoolSystem.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ public class Enrollment {
 
     @Id
     @Column(name = "enrollment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int enrollemtId;
 

@@ -1,5 +1,6 @@
 package com.school.schoolSystem.exception;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<Map<String, String>> handleMissingParam(EntityExistsException ex) {
+        Map<String, String> error = new HashMap<>();
+
+        String message = ex.getMessage();
+        error.put("message", message);
+        error.put("error", "Entity already exists");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, String>> handleMissingParam(MissingServletRequestParameterException ex) {

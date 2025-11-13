@@ -1,9 +1,12 @@
 package com.school.schoolSystem.service;
 
+import com.school.schoolSystem.dto.StudentRequestDTO;
 import com.school.schoolSystem.dto.StudentResponseDTO;
 import com.school.schoolSystem.model.Student;
+import com.school.schoolSystem.repository.EnrollmentRepository;
 import com.school.schoolSystem.repository.StudentRepository;
-import com.school.schoolSystem.repository.StudentRepositoryOld;
+import jakarta.persistence.EntityExistsException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -11,9 +14,11 @@ import java.util.List;
 public class StudentService {
 
     private StudentRepository repo;
+    private EnrollmentRepository enrollmentRepo;
 
-    public StudentService(StudentRepository repo) {
+    public StudentService(StudentRepository repo, EnrollmentRepository enrollmentRepo) {
         this.repo = repo;
+        this.enrollmentRepo = enrollmentRepo;
     }
 
     public List<StudentResponseDTO> findAll() {
@@ -44,8 +49,25 @@ public class StudentService {
         )).toList();
     }
 
+    @Transactional
     public boolean deleteStudent(int id){
-        return repo.deleteStudent(id);
+        enrollmentRepo.deleteEnrollmentsWhereStudentId(id);
+        repo.deleteStudent(id);
+        return true;
     }
 
+    public StudentResponseDTO createStudent(StudentRequestDTO dto) {
+        repo.findByEmail(dto.getEmail())
+                .ifPresent(c -> {
+                    throw new EntityExistsException("Student with the given email already exists");
+                });
+
+        Student student = new Student(dto.getName(), dto.getAge(), dto.getEmail());
+        //table students
+        Student savedStudent = repo.save(student);
+
+        StudentResponseDTO response = new StudentResponseDTO(student.getId(), student.getName(), student.getAge(), student.getEmail());
+        return response;
+
+    }
 }
