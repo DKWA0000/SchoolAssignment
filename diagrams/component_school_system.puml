@@ -1,0 +1,20 @@
+@startuml component_school_system
+!pragma layout smetana
+skinparam componentStyle rectangle
+
+package "Runtime" {
+  node "Spring Boot App" <<Application>> {
+    component "Controllers (REST API)" as C
+    component "Service Layer" as S
+    component "Repositories (JPA)" as R
+  }
+  database "MySQL Database" as DB
+  node "Client (Postman / Browser)" as Client
+}
+
+Client --> C : HTTP (JSON)
+C --> S : service calls
+S --> R : JPA calls
+R --> DB : SQL queries
+
+@enduml

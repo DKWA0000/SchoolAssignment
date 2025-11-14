@@ -1,0 +1,98 @@
+@startuml class_school_system
+!pragma layout smetana
+
+' Domain entities
+package "Model (JPA Entities)" {
+  class Student {
+    + Long id
+    + String name
+    + int age
+    + String email
+  }
+
+  class Course {
+    + Long id
+    + String title
+    + String teacher
+    + int maxStudents
+  }
+
+  class Enrollment {
+    + Long id
+    + LocalDate enrolledDate
+  }
+}
+
+' DTOs
+package "DTOs" {
+  class StudentRequestDTO {
+    + String name
+    + int age
+    + String email
+  }
+  class StudentResponseDTO {
+    + Long id
+    + String name
+    + int age
+    + String email
+  }
+  class CourseRequestDTO {
+    + String title
+    + String teacher
+    + int maxStudents
+  }
+  class CourseResponseDTO {
+    + Long id
+    + String title
+    + String teacher
+    + int maxStudents
+  }
+  class EnrollDTO {
+    + Long studentId
+    + Long courseId
+  }
+  class EnrollmentResponseDTO {
+    + Long id
+    + Long studentId
+    + Long courseId
+    + String date
+  }
+}
+
+
+' Controllers
+package "API (Controllers)" {
+  class StudentController
+  class CourseController
+  class EnrollmentController
+}
+
+' Services & Repos
+package "Service & Repository" {
+  class StudentService
+  class CourseService
+  class EnrollmentService
+
+  interface StudentRepository
+  interface CourseRepository
+  interface EnrollmentRepository
+}
+
+' Relations (declare outside package bodies for clarity)
+Student "1" <-- "0..*" Enrollment : has
+Course "1"  <-- "0..*" Enrollment : contains
+
+' Associations
+StudentController --> StudentService
+CourseController --> CourseService
+EnrollmentController --> EnrollmentService
+StudentService --> StudentRepository
+CourseService --> CourseRepository
+EnrollmentService --> EnrollmentRepository
+
+StudentController ..> StudentRequestDTO : uses
+StudentController ..> StudentResponseDTO : returns
+CourseController ..> CourseRequestDTO
+EnrollmentController ..> EnrollDTO
+
+@enduml

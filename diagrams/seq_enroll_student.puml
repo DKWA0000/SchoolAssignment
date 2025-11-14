@@ -1,0 +1,29 @@
+@startuml seq_enroll_student
+!pragma layout smetana
+
+actor Client
+participant EnrollmentController as Controller
+participant EnrollmentService as Service
+participant StudentRepository as SRepo
+participant CourseRepository as CRepo
+participant EnrollmentRepository as ERepo
+database MySQL as DB
+
+Client -> Controller: PUT /enrollments/enroll { studentId, courseId }
+Controller -> Service: enroll(studentId, courseId)
+Service -> SRepo: findById(studentId)
+SRepo -> DB: SELECT student
+DB --> SRepo: student row / empty
+Service -> CRepo: findById(courseId)
+CRepo -> DB: SELECT course
+DB --> CRepo: course row / empty
+Service -> ERepo: existsByStudentIdAndCourseId(studentId, courseId)
+ERepo -> DB: SELECT count(*) FROM enrollments WHERE student_id=? AND course_id=?
+DB --> ERepo: 0 / >0
+Service -> ERepo: countByCourseId(courseId)
+Service -> ERepo: save(enrollment)
+ERepo -> DB: INSERT INTO enrollments
+DB --> ERepo: inserted id
+Service --> Controller: EnrollmentResponseDTO
+Controller --> Client: 201 Created { enrollment details }
+@enduml

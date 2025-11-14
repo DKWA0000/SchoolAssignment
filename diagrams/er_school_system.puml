@@ -1,0 +1,32 @@
+@startuml er_school_system
+!pragma layout smetana
+
+entity students {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR
+  age : INT
+  email : VARCHAR
+}
+
+entity courses {
+  * id : INT <<PK>>
+  --
+  title : VARCHAR
+  teacher : VARCHAR
+  max_students : INT
+}
+
+entity enrollments {
+  * id : INT <<PK>>
+  --
+  student_id : INT <<FK>>
+  course_id : INT <<FK>>
+  enrolled_date : DATE
+  --
+  UNIQUE(student_id, course_id)
+}
+
+students ||--o{ enrollments
+courses ||--o{ enrollments
+@enduml
