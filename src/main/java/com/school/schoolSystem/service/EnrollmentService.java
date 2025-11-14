@@ -99,7 +99,7 @@ public class EnrollmentService {
     public Optional<EnrolledStudentsDTO> getEnrolledByDate(int courseId, String date){
         return courseRepository.findById(courseId)
                 .map(course -> new EnrolledStudentsDTO(course.getTitle(),
-                        repo.getEnrollmentsByDate(date).stream()
+                        repo.getEnrollmentsByDate(date, courseId).stream()
                                 .map(this::buildStudentDTO).toList()));
     }
 

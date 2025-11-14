@@ -41,8 +41,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
     Optional<Integer> checkCourseStatus(int course);
 
     @NativeQuery("SELECT * FROM enrollments " +
-                   "WHERE (reg_date > ?1)")
-    List<Enrollment> getEnrollmentsByDate(String date);
+                   "WHERE (reg_date > ?1) AND (course_id = ?2)")
+    List<Enrollment> getEnrollmentsByDate(String date, int course);
 
     @Modifying
     @NativeQuery("DELETE FROM enrollments " +
