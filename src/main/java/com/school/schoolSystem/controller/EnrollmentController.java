@@ -54,7 +54,7 @@ public class EnrollmentController {
     }
 
     @GetMapping("/enrollments/getByDate/{date}")
-    public ResponseEntity<List<Optional<EnrolledStudentsDTO>>> getEnrollmentsByDate(String date){
+    public ResponseEntity<List<Optional<EnrolledStudentsDTO>>> getEnrollmentsByDate(@PathVariable String date){
         return ResponseEntity.ok(service.getAllEnrolledByDate(date));
     }
 }
